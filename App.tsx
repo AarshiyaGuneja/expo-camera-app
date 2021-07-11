@@ -1,8 +1,14 @@
 import {StatusBar} from 'expo-status-bar'
 import React from 'react'
+import {Camera} from 'expo-camera'
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 
 export default function App() {
+  const [startCamera,setStartCamera] = React.useState(false)
+
+const __startCamera = ()=>{
+
+}
   return (
     <View style={styles.container}>
       <View
