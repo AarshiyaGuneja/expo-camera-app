@@ -1,16 +1,29 @@
 import {StatusBar} from 'expo-status-bar'
 import React from 'react'
 import {Camera} from 'expo-camera'
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
+let camera: Camera
+import {StyleSheet, Text, View, TouchableOpacity, Alert, ImageBackground, Image} from 'react-native'
 
 export default function App() {
   const [startCamera,setStartCamera] = React.useState(false)
 
-const __startCamera = ()=>{
+  const __startCamera = async () => {
+    const {status} = await Camera.requestPermissionsAsync()
+ if(status === 'granted'){
 
+ }else{
+   Alert.alert("Access denied")
+ }
 }
   return (
+    
     <View style={styles.container}>
+      <Camera
+    style={{flex: 1,width:"100%"}}
+    ref={(r) => {
+    camera = r
+    }}
+    ></Camera>
       <View
         style={{
           flex: 1,
@@ -20,6 +33,7 @@ const __startCamera = ()=>{
         }}
       >
         <TouchableOpacity
+        onPress={__startCamera}
           style={{
             width: 130,
             borderRadius: 4,
