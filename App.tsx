@@ -15,6 +15,14 @@ export default function App() {
    Alert.alert("Access denied")
  }
 }
+
+const __takePicture = async () => {
+  if (!camera) return
+  const photo = await camera.takePictureAsync()
+  console.log(photo)
+  setPreviewVisible(true)
+  setCapturedImage(photo)
+}
   return (
     
     <View style={styles.container}>
