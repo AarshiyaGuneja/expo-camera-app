@@ -1,8 +1,12 @@
 import {StatusBar} from 'expo-status-bar'
+import 'react-native-gesture-handler';
 import React from 'react'
-import {StyleSheet, Text, View, TouchableOpacity, Alert, ImageBackground, Image} from 'react-native'
+import {StyleSheet, Text, View, TouchableOpacity, Alert, ImageBackground, Image, Button} from 'react-native'
+import { NavigationContainer } from '@react-navigation/native';
 import {Camera} from 'expo-camera'
 let camera: Camera
+import { createStackNavigator } from '@react-navigation/stack';
+
 export default function App() {
   const [startCamera, setStartCamera] = React.useState(false)
   const [previewVisible, setPreviewVisible] = React.useState(false)
@@ -10,6 +14,33 @@ export default function App() {
   const [cameraType, setCameraType] = React.useState(Camera.Constants.Type.back)
   const [flashMode, setFlashMode] = React.useState('off')
 
+  
+const Stack = createStackNavigator();
+
+  const MyStack = () => {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Preview"
+            component={PreviewScreen}
+            options={{ title: 'Welcome' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  };
+
+  const PreviewScreen = ({ navigation }) => {
+    return (
+      <Button
+        onPress={() =>
+          navigation.navigate('App')
+        }
+      />
+    );
+  };
+  
   const __startCamera = async () => {
     const {status} = await Camera.requestPermissionsAsync()
     console.log(status)
@@ -26,7 +57,6 @@ export default function App() {
     //setStartCamera(false)
     setCapturedImage(photo)
   }
-  const __savePhoto = () => {}
   const __retakePicture = () => {
     setCapturedImage(null)
     setPreviewVisible(false)
@@ -49,6 +79,8 @@ export default function App() {
     }
   }
   return (
+    <NavigationContainer>
+      
     <View style={styles.container}>
       {startCamera ? (
         <View
@@ -58,7 +90,7 @@ export default function App() {
           }}
         >
           {previewVisible && capturedImage ? (
-            <CameraPreview photo={capturedImage} savePhoto={__savePhoto} retakePicture={__retakePicture} />
+            <CameraPreview photo={capturedImage} retakePicture={__retakePicture} />
           ) : (
             <Camera
               type={cameraType}
@@ -190,6 +222,7 @@ export default function App() {
 
       <StatusBar style="auto" />
     </View>
+    </NavigationContainer>
   )
 }
 
@@ -250,25 +283,6 @@ const CameraPreview = ({photo, retakePicture, savePhoto}: any) => {
                 }}
               >
                 Re-take
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={savePhoto}
-              style={{
-                width: 130,
-                height: 40,
-
-                alignItems: 'center',
-                borderRadius: 4
-              }}
-            >
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 20
-                }}
-              >
-                save photo
               </Text>
             </TouchableOpacity>
           </View>
